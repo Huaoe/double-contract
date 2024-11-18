@@ -1,110 +1,101 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.0;
+pragma solidity ^0.8.28;
 
 import "@openzeppelin/contracts/utils/structs/EnumerableSet.sol";
 import "@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol";
 
 interface IBaseDoNFT is IERC721Receiver {
-    struct Duration {
-        uint64 start;
-        uint64 end;
-    }
+  struct Duration {
+    uint64 start;
+    uint64 end;
+  }
 
-    struct DoNftInfo {
-        uint256 oid;
-        uint64 nonce;
-        EnumerableSet.UintSet durationList;
-    }
+  struct DoNftInfo {
+    uint256 oid;
+    uint64 nonce;
+    EnumerableSet.UintSet durationList;
+  }
 
-    event MetadataUpdate(uint256 tokenId);
+  event MetadataUpdate(uint256 tokenId);
 
-    event DurationUpdate(
-        uint256 durationId,
-        uint256 tokenId,
-        uint64 start,
-        uint64 end
+  event DurationUpdate(
+    uint256 durationId,
+    uint256 tokenId,
+    uint64 start,
+    uint64 end
+  );
+
+  event DurationBurn(uint256[] durationIdList);
+
+  event CheckIn(
+    address opreator,
+    address to,
+    uint256 tokenId,
+    uint256 durationId,
+    uint256 oid,
+    uint64 expires
+  );
+
+  function mintVNft(uint256 oid) external returns (uint256 tid);
+
+  function mint(
+    uint256 tokenId,
+    uint256 durationId,
+    uint64 start,
+    uint64 end,
+    address to,
+    address user
+  ) external returns (uint256 tid);
+
+  function setMaxDuration(uint64 v) external;
+
+  function getMaxDuration() external view returns (uint64);
+
+  function getDurationIdList(
+    uint256 tokenId
+  ) external view returns (uint256[] memory);
+
+  function getDurationListLength(
+    uint256 tokenId
+  ) external view returns (uint256);
+
+  function getDoNftInfo(
+    uint256 tokenId
+  )
+    external
+    view
+    returns (
+      uint256 oid,
+      uint256[] memory durationIds,
+      uint64[] memory starts,
+      uint64[] memory ends,
+      uint64 nonce
     );
 
-    event DurationBurn(uint256[] durationIdList);
+  function getNonce(uint256 tokenId) external view returns (uint64);
 
-    event CheckIn(
-        address opreator,
-        address to,
-        uint256 tokenId,
-        uint256 durationId,
-        uint256 oid,
-        uint64 expires
-    );
+  function getDuration(
+    uint256 durationId
+  ) external view returns (uint64 start, uint64 end);
 
-    function mintVNft(uint256 oid) external returns (uint256 tid);
+  function getDurationByIndex(
+    uint256 tokenId,
+    uint256 index
+  ) external view returns (uint256 durationId, uint64 start, uint64 end);
 
-    function mint(
-        uint256 tokenId,
-        uint256 durationId,
-        uint64 start,
-        uint64 end,
-        address to,
-        address user
-    ) external returns (uint256 tid);
+  function getVNftId(uint256 originalNftId) external view returns (uint256);
 
-    function setMaxDuration(uint64 v) external;
+  function isVNft(uint256 tokenId) external view returns (bool);
 
-    function getMaxDuration() external view returns (uint64);
+  function isValidNow(uint256 tokenId) external view returns (bool isValid);
 
-    function getDurationIdList(uint256 tokenId)
-        external
-        view
-        returns (uint256[] memory);
+  function getOriginalNftAddress() external view returns (address);
 
-    function getDurationListLength(uint256 tokenId)
-        external
-        view
-        returns (uint256);
+  function getOriginalNftId(uint256 tokenId) external view returns (uint256);
 
-    function getDoNftInfo(uint256 tokenId)
-        external
-        view
-        returns (
-            uint256 oid,
-            uint256[] memory durationIds,
-            uint64[] memory starts,
-            uint64[] memory ends,
-            uint64 nonce
-        );
+  function checkIn(address to, uint256 tokenId, uint256 durationId) external;
 
-    function getNonce(uint256 tokenId) external view returns (uint64);
+  function getUser(uint256 orignalNftId) external view returns (address);
 
-    function getDuration(uint256 durationId)
-        external
-        view
-        returns (uint64 start, uint64 end);
-
-    function getDurationByIndex(uint256 tokenId, uint256 index)
-        external
-        view
-        returns (
-            uint256 durationId,
-            uint64 start,
-            uint64 end
-        );
-
-    function getVNftId(uint256 originalNftId) external view returns (uint256);
-
-    function isVNft(uint256 tokenId) external view returns (bool);
-
-    function isValidNow(uint256 tokenId) external view returns (bool isValid);
-
-    function getOriginalNftAddress() external view returns (address);
-
-    function getOriginalNftId(uint256 tokenId) external view returns (uint256);
-
-    function checkIn(
-        address to,
-        uint256 tokenId,
-        uint256 durationId
-    ) external;
-
-    function getUser(uint256 orignalNftId) external view returns (address);
-
-    function exists(uint256 tokenId) external view returns (bool);
+  function exists(uint256 tokenId) external view returns (bool);
 }

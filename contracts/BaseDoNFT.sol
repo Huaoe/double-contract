@@ -1,12 +1,14 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.0;
+pragma solidity ^0.8.28;
 
-import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
-import "@openzeppelin/contracts-upgradeable/security/ReentrancyGuardUpgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/utils/ReentrancyGuardUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC721/ERC721Upgradeable.sol";
 import "./OwnableContract.sol";
 import "./IBaseDoNFT.sol";
 
+/// @title BaseDoNFT Contract
+/// @notice This contract implements base functionality for a dynamic ownership NFT
+/// @dev This is an abstract contract that implements ERC721 with dynamic ownership periods
 abstract contract BaseDoNFT is
     OwnableContract,
     ERC721Upgradeable,
@@ -55,10 +57,10 @@ abstract contract BaseDoNFT is
         uint256 tokenId
     ) internal view returns (bool) {
         if (msg.sender == market) return true;
-        address _owner = ERC721(nftAddress).ownerOf(tokenId);
+        address _owner = IERC721(nftAddress).ownerOf(tokenId);
         return (spender == _owner ||
-            ERC721(nftAddress).getApproved(tokenId) == spender ||
-            ERC721(nftAddress).isApprovedForAll(_owner, spender));
+            IERC721(nftAddress).getApproved(tokenId) == spender ||
+            IERC721(nftAddress).isApprovedForAll(_owner, spender));
     }
 
     function setIsOnlyNow(bool v) public onlyAdmin {
@@ -173,7 +175,7 @@ abstract contract BaseDoNFT is
             start = uint64(block.timestamp);
         }
         require(
-            _isApprovedOrOwner(_msgSender(), tokenId),
+            isApprovedOrOwnerOrMarket(_msgSender(), tokenId),
             "not owner nor approved"
         );
         require(
@@ -193,7 +195,7 @@ abstract contract BaseDoNFT is
             tDurationId = curDurationId;
             _burnDuration(tokenId, durationId);
             if (info.durationList.length() == 0) {
-                _burn(tokenId);
+                _burnToken(tokenId);
             }
         } else {
             if (start == duration.start && end != duration.end) {
@@ -267,7 +269,7 @@ abstract contract BaseDoNFT is
         uint256 targetDurationId
     ) public {
         require(
-            _isApprovedOrOwner(_msgSender(), tokenId),
+            isApprovedOrOwnerOrMarket(_msgSender(), tokenId),
             "ERC721: transfer caller is not owner nor approved"
         );
         require(contains(tokenId, durationId), "not contains");
@@ -291,7 +293,7 @@ abstract contract BaseDoNFT is
         }
 
         if (doNftMapping[tokenId].durationList.length() == 0) {
-            _burn(tokenId);
+            _burnToken(tokenId);
         }
     }
 
@@ -312,10 +314,10 @@ abstract contract BaseDoNFT is
         emit DurationBurn(info.durationList.values());
         delete info.durationList;
         delete oid2vid[info.oid];
-        _burn(wid);
+        _burnToken(wid);
     }
 
-    function _burn(uint256 tokenId) internal virtual override {
+    function _burnToken(uint256 tokenId) internal virtual {
         super._burn(tokenId);
         delete doNftMapping[tokenId];
     }
@@ -326,7 +328,7 @@ abstract contract BaseDoNFT is
         uint256 durationId
     ) public virtual {
         require(
-            _isApprovedOrOwner(_msgSender(), tokenId),
+            isApprovedOrOwnerOrMarket(_msgSender(), tokenId),
             "not owner nor approved"
         );
         DoNftInfo storage info = doNftMapping[tokenId];
@@ -360,7 +362,7 @@ abstract contract BaseDoNFT is
 
         if (info.durationList.length() == 0) {
             require(!isVNft(tokenId), "can not burn vNFT");
-            _burn(tokenId);
+            _burnToken(tokenId);
         }
     }
 
@@ -401,29 +403,30 @@ abstract contract BaseDoNFT is
     }
 
     function onERC721Received(
-        address operator,
-        address from,
-        uint256 tokenId,
-        bytes calldata data
+        address,  // _operator
+        address,  // _from
+        uint256,  // _tokenId
+        bytes calldata  // _data
     ) external pure virtual override returns (bytes4) {
         bytes4 received = 0x150b7a02;
         return received;
     }
 
-    function _beforeTokenTransfer(
-        address from,
+    function _update(
         address to,
-        uint256 tokenId
-    ) internal virtual override {
-        super._beforeTokenTransfer(from, to, tokenId);
+        uint256 tokenId,
+        address auth
+    ) internal virtual override returns (address) {
+        address from = super._update(to, tokenId, auth);
         doNftMapping[tokenId].nonce++;
+        return from;
     }
 
     function supportsInterface(bytes4 interfaceId)
         public
         view
         virtual
-        override
+        override(ERC721Upgradeable)
         returns (bool)
     {
         return
@@ -432,18 +435,19 @@ abstract contract BaseDoNFT is
     }
 
     function exists(uint256 tokenId) public view virtual returns (bool) {
-        return _exists(tokenId);
+        return _ownerOf(tokenId) != address(0);
     }
 
-    function _isApprovedOrOwner(address spender, uint256 tokenId)
+    function isApprovedOrOwnerOrMarket(address spender, uint256 tokenId)
         internal
         view
-        virtual
-        override
         returns (bool)
     {
         if (spender == market) return true;
-        return super._isApprovedOrOwner(spender, tokenId);
+        address owner = _ownerOf(tokenId);
+        return (spender == owner || 
+                getApproved(tokenId) == spender || 
+                isApprovedForAll(owner, spender));
     }
 
     function setMarket(address _market) public onlyOwner {
@@ -458,10 +462,9 @@ abstract contract BaseDoNFT is
     function multicall(bytes[] calldata data) external returns(bytes[] memory results) {
         results = new bytes[](data.length);
         for(uint i = 0; i < data.length; i++) {
-            (bool success, bytes memory result) = address(this).delegatecall(data[i]);
-            if(success){
-                results[i] = result;
-            }
+            (bool success, bytes memory result) = address(this).call(data[i]);
+            require(success, "Multicall: call failed");
+            results[i] = result;
         }
         return results;
     }

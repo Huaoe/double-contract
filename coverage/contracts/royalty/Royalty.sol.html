@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for contracts\royalty\Royalty.sol</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../../prettify.css" />
+    <link rel="stylesheet" href="../../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../../index.html">all files</a> / <a href="index.html">contracts/royalty/</a> Royalty.sol
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>0/11</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>0/16</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>0/7</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>0/17</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line low'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">// SPDX-License-Identifier: MIT
+pragma solidity &gt;=0.6.6 &lt;0.9.0;
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+import "./IRoyalty.sol";
+&nbsp;
+contract Royalty is IRoyalty {
+    /** percent = fee/100000 */
+    uint256 private fee;
+    address payable private beneficiary;
+    address public royaltyAdmin;
+    address public tempRoyaltyAdmin;
+&nbsp;
+<span class="fstat-no" title="function not covered" >    modifier onlyRoyaltyAdmin() {</span>
+<span class="cstat-no" title="statement not covered" >        require(msg.sender == royaltyAdmin, "onlyAdmin")</span>;
+        _;
+    }
+&nbsp;
+<span class="fstat-no" title="function not covered" >    function setTempRoyaltyAdmin(address tempAdmin_) public virtual {</span>
+<span class="cstat-no" title="statement not covered" >        require(msg.sender == royaltyAdmin, "not royaltyAdmin")</span>;
+<span class="cstat-no" title="statement not covered" >        require(tempAdmin_ != address(0) &amp;&amp; tempAdmin_ != royaltyAdmin)</span>;
+        tempRoyaltyAdmin = tempAdmin_;
+    }
+&nbsp;
+<span class="fstat-no" title="function not covered" >    function claimRoyaltyAdmin() public virtual {</span>
+<span class="cstat-no" title="statement not covered" >        require(msg.sender == tempRoyaltyAdmin, "not tempRoyaltyAdmin")</span>;
+        royaltyAdmin = payable(tempRoyaltyAdmin);
+        tempRoyaltyAdmin = address(0);
+<span class="cstat-no" title="statement not covered" >        emit ClaimRoyaltyAdmin(msg.sender);</span>
+    }
+&nbsp;
+<span class="fstat-no" title="function not covered" >    function setBeneficiary(address payable beneficiary_)</span>
+        public
+        virtual
+        onlyRoyaltyAdmin
+    {
+<span class="cstat-no" title="statement not covered" >        require(beneficiary_ != address(0) &amp;&amp; beneficiary_ != beneficiary)</span>;
+        beneficiary = beneficiary_;
+<span class="cstat-no" title="statement not covered" >        emit SetBeneficiary(msg.sender, beneficiary);</span>
+    }
+&nbsp;
+<span class="fstat-no" title="function not covered" >    function getBeneficiary() external view returns (address payable) {</span>
+<span class="cstat-no" title="statement not covered" >        return beneficiary;</span>
+    }
+&nbsp;
+<span class="fstat-no" title="function not covered" >    function setRoyaltyFee(uint256 fee_) public virtual onlyRoyaltyAdmin {</span>
+<span class="cstat-no" title="statement not covered" >        require(fee_ &lt;= 10000, "fee exceeds 10pct")</span>;
+        fee = fee_;
+<span class="cstat-no" title="statement not covered" >        emit SetRoyaltyFee(msg.sender, fee);</span>
+    }
+&nbsp;
+<span class="fstat-no" title="function not covered" >    function getRoyaltyFee() public view returns (uint256) {</span>
+<span class="cstat-no" title="statement not covered" >        return fee;</span>
+    }
+}
+&nbsp;</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Fri Nov 15 2024 18:00:01 GMT+0100 (Central European Standard Time)
+</div>
+</div>
+<script src="../../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../../sorter.js"></script>
+</body>
+</html>

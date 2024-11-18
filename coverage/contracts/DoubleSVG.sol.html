@@ -1,0 +1,956 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for contracts\DoubleSVG.sol</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../prettify.css" />
+    <link rel="stylesheet" href="../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../index.html">all files</a> / <a href="index.html">contracts/</a> DoubleSVG.sol
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>0/49</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>0/22</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>0/10</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>0/78</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line low'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163
+164
+165
+166
+167
+168
+169
+170
+171
+172
+173
+174
+175
+176
+177
+178
+179
+180
+181
+182
+183
+184
+185
+186
+187
+188
+189
+190
+191
+192
+193
+194
+195
+196
+197
+198
+199
+200
+201
+202
+203
+204
+205
+206
+207
+208
+209
+210
+211
+212
+213
+214
+215
+216
+217
+218
+219
+220
+221
+222
+223
+224
+225
+226
+227
+228
+229
+230
+231
+232
+233
+234
+235
+236
+237
+238
+239
+240
+241
+242
+243
+244
+245
+246
+247
+248
+249
+250
+251
+252
+253
+254
+255
+256
+257
+258
+259
+260
+261
+262
+263
+264
+265
+266
+267
+268
+269
+270
+271
+272
+273
+274
+275
+276
+277
+278
+279
+280
+281
+282
+283
+284
+285
+286
+287
+288
+289
+290
+291
+292
+293
+294
+295
+296
+297
+298</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">// SPDX-License-Identifier: MIT
+&nbsp;
+pragma solidity ^0.8.28;
+&nbsp;
+library DoubleSVG {
+  string internal constant TABLE_ENCODE =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/-:# ";
+&nbsp;
+  uint256 constant SECONDS_PER_DAY = 24 * 60 * 60;
+  uint256 constant SECONDS_PER_HOUR = 60 * 60;
+  uint256 constant SECONDS_PER_MINUTE = 60;
+  int256 constant OFFSET19700101 = 2440588;
+&nbsp;
+<span class="fstat-no" title="function not covered" >  function encode(bytes memory data) internal pure returns (string memory) {</span>
+<span class="cstat-no" title="statement not covered" >    if (data.length == 0) <span class="cstat-no" title="statement not covered" >return "";</span></span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    string memory table = TABLE_ENCODE;</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    uint256 encodedLen = 4 * ((data.length + 2) / 3);</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    string memory result = new string(encodedLen + 32);</span>
+&nbsp;
+    assembly {
+      mstore(result, encodedLen)
+      let tablePtr := add(table, 1)
+      let dataPtr := data
+      let endPtr := add(dataPtr, mload(data))
+      let resultPtr := add(result, 32)
+      for {} lt(dataPtr, endPtr) {} {
+        dataPtr := add(dataPtr, 3)
+        let input := mload(dataPtr)
+&nbsp;
+        mstore8(resultPtr, mload(add(tablePtr, and(shr(18, input), 0x3F))))
+        resultPtr := add(resultPtr, 1)
+        mstore8(resultPtr, mload(add(tablePtr, and(shr(12, input), 0x3F))))
+        resultPtr := add(resultPtr, 1)
+        mstore8(resultPtr, mload(add(tablePtr, and(shr(6, input), 0x3F))))
+        resultPtr := add(resultPtr, 1)
+        mstore8(resultPtr, mload(add(tablePtr, and(input, 0x3F))))
+        resultPtr := add(resultPtr, 1)
+      }
+&nbsp;
+      switch mod(mload(data), 3)
+      case 1 {
+        mstore(sub(resultPtr, 2), shl(240, 0x3d3d))
+      }
+      case 2 {
+        mstore(sub(resultPtr, 1), shl(248, 0x3d))
+      }
+    }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    return result;</span>
+  }
+&nbsp;
+<span class="fstat-no" title="function not covered" >  function _daysFromDate(</span>
+    uint256 year,
+    uint256 month,
+    uint256 day
+  ) internal pure returns (uint256 _days) {
+<span class="cstat-no" title="statement not covered" >    require(year &gt;= 1970)</span>;
+<span class="cstat-no" title="statement not covered" >    int256 _year = int256(year);</span>
+<span class="cstat-no" title="statement not covered" >    int256 _month = int256(month);</span>
+<span class="cstat-no" title="statement not covered" >    int256 _day = int256(day);</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    int256 __days = _day -</span>
+      32075 +
+      (1461 * (_year + 4800 + (_month - 14) / 12)) /
+      4 +
+      (367 * (_month - 2 - ((_month - 14) / 12) * 12)) /
+      12 -
+      (3 * ((_year + 4900 + (_month - 14) / 12) / 100)) /
+      4 -
+      OFFSET19700101;
+&nbsp;
+    _days = uint256(__days);
+  }
+&nbsp;
+<span class="fstat-no" title="function not covered" >  function _daysToDate(</span>
+    uint256 _days
+  ) internal pure returns (uint256 year, uint256 month, uint256 day) {
+<span class="cstat-no" title="statement not covered" >    int256 __days = int256(_days);</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    int256 L = __days + 68569 + OFFSET19700101;</span>
+<span class="cstat-no" title="statement not covered" >    int256 N = (4 * L) / 146097;</span>
+    L = L - (146097 * N + 3) / 4;
+<span class="cstat-no" title="statement not covered" >    int256 _year = (4000 * (L + 1)) / 1461001;</span>
+    L = L - (1461 * _year) / 4 + 31;
+<span class="cstat-no" title="statement not covered" >    int256 _month = (80 * L) / 2447;</span>
+<span class="cstat-no" title="statement not covered" >    int256 _day = L - (2447 * _month) / 80;</span>
+    L = _month / 11;
+    _month = _month + 2 - 12 * L;
+    _year = 100 * (N - 49) + _year + L;
+&nbsp;
+    year = uint256(_year);
+    month = uint256(_month);
+    day = uint256(_day);
+  }
+&nbsp;
+<span class="fstat-no" title="function not covered" >  function timestampFromDateTime(</span>
+    uint256 year,
+    uint256 month,
+    uint256 day,
+    uint256 hour,
+    uint256 minute,
+    uint256 second
+  ) internal pure returns (uint256 timestamp) {
+    timestamp =
+      _daysFromDate(year, month, day) *
+      SECONDS_PER_DAY +
+      hour *
+      SECONDS_PER_HOUR +
+      minute *
+      SECONDS_PER_MINUTE +
+      second;
+  }
+&nbsp;
+<span class="fstat-no" title="function not covered" >  function timestampToDateTime(</span>
+    uint256 timestamp
+  )
+    internal
+    pure
+    returns (
+      uint256 year,
+      uint256 month,
+      uint256 day,
+      uint256 hour,
+      uint256 minute,
+      uint256 second
+    )
+  {
+    (year, month, day) = _daysToDate(timestamp / SECONDS_PER_DAY);
+<span class="cstat-no" title="statement not covered" >    uint256 secs = timestamp % SECONDS_PER_DAY;</span>
+    hour = secs / SECONDS_PER_HOUR;
+    secs = secs % SECONDS_PER_HOUR;
+    minute = secs / SECONDS_PER_MINUTE;
+    second = secs % SECONDS_PER_MINUTE;
+  }
+&nbsp;
+  /**
+   * @dev Converts a `uint256` to its ASCII `string` decimal representation.
+   */
+<span class="fstat-no" title="function not covered" >  function toString(uint256 value) internal pure returns (string memory) {</span>
+<span class="cstat-no" title="statement not covered" >    if (value == 0) {</span>
+<span class="cstat-no" title="statement not covered" >      return "0";</span>
+    }
+<span class="cstat-no" title="statement not covered" >    uint256 temp = value;</span>
+<span class="cstat-no" title="statement not covered" >    uint256 digits;</span>
+<span class="cstat-no" title="statement not covered" >    while (temp != 0) {</span>
+      digits++;
+      temp /= 10;
+    }
+<span class="cstat-no" title="statement not covered" >    bytes memory buffer = new bytes(digits);</span>
+<span class="cstat-no" title="statement not covered" >    while (value != 0) {</span>
+      digits -= 1;
+      buffer[digits] = bytes1(uint8(48 + uint256(value % 10)));
+      value /= 10;
+    }
+<span class="cstat-no" title="statement not covered" >    return string(buffer);</span>
+  }
+&nbsp;
+<span class="fstat-no" title="function not covered" >  function generateImage(</span>
+    uint64 start,
+    uint64 end,
+    string memory nftName
+  ) internal view returns (string memory) {
+<span class="cstat-no" title="statement not covered" >    string memory nameColor = "#000000";</span>
+<span class="cstat-no" title="statement not covered" >    string memory bgColor = "#f0bb00";</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    if (block.timestamp &gt; end) {</span>
+      bgColor = "#b2b2b2";
+    } else {
+      nameColor = "#b25600";
+    }
+<span class="cstat-no" title="statement not covered" >    string memory endTimeStr = "Infinity";</span>
+<span class="cstat-no" title="statement not covered" >    if (end &lt; type(uint64).max) {</span>
+      endTimeStr = formatDate(end);
+    }
+<span class="cstat-no" title="statement not covered" >    return</span>
+      string(
+        abi.encodePacked(
+          '&lt;svg width="500" height="500" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"&gt; &lt;rect fill="',
+          bgColor,
+          '" height="500" width="500" y="0" x="0"/&gt;&lt;text font-weight="bold" xml:space="preserve" font-family="Helvetica, Arial, sans-serif" font-size="24" y="310" x="60" fill="',
+          nameColor,
+          '" &gt;',
+          nftName,
+          '&lt;/text&gt;&lt;text font-weight="normal" xml:space="preserve" font-family="Helvetica, Arial, sans-serif" font-size="20" y="350" x="60"&gt;Start Time : ',
+          formatDate(start),
+          '&lt;/text&gt;&lt;text font-weight="normal" xml:space="preserve" font-family="Helvetica, Arial, sans-serif" font-size="20" y="380" x="60"&gt;End Time  : ',
+          endTimeStr,
+          '&lt;/text&gt;&lt;text font-weight="bold" xml:space="preserve" font-family="Helvetica, Arial, sans-serif" font-size="20" y="461" x="163"&gt;@Double Protocol&lt;/text&gt;&lt;g stroke="null" transform="matrix(0.5,0,0,0.5,-55,80)"&gt;&lt;image stroke="null" x="395" y="-296" id="svg_19" xlink:href="data:image/png;base64,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" transform="translate(-2.2737367544323206e-13,384.775146484375) scale(0.5799999833106995,0.5899999737739563) " height="294" width="258"/&gt;&lt;/g&gt;&lt;/svg&gt;'
+        )
+      );
+  }
+&nbsp;
+<span class="fstat-no" title="function not covered" >  function formatDate(uint256 timestamp) internal pure returns (string memory) {</span>
+<span class="cstat-no" title="statement not covered" >    (</span>
+      uint256 year,
+      uint256 month,
+      uint256 day,
+      uint256 hour,
+      uint256 minute,
+      uint256 second
+    ) = timestampToDateTime(timestamp);
+<span class="cstat-no" title="statement not covered" >    string memory monthStr = toString(month);</span>
+<span class="cstat-no" title="statement not covered" >    if (month &lt; 10) {</span>
+      monthStr = string(abi.encodePacked("0", monthStr));
+    }
+<span class="cstat-no" title="statement not covered" >    string memory dayStr = toString(day);</span>
+<span class="cstat-no" title="statement not covered" >    if (day &lt; 10) {</span>
+      dayStr = string(abi.encodePacked("0", dayStr));
+    }
+<span class="cstat-no" title="statement not covered" >    string memory hourStr = toString(hour);</span>
+<span class="cstat-no" title="statement not covered" >    if (hour &lt; 10) {</span>
+      hourStr = string(abi.encodePacked("0", hourStr));
+    }
+<span class="cstat-no" title="statement not covered" >    string memory minuteStr = toString(minute);</span>
+<span class="cstat-no" title="statement not covered" >    if (minute &lt; 10) {</span>
+      minuteStr = string(abi.encodePacked("0", minuteStr));
+    }
+<span class="cstat-no" title="statement not covered" >    string memory secondStr = toString(second);</span>
+<span class="cstat-no" title="statement not covered" >    if (second &lt; 10) {</span>
+      secondStr = string(abi.encodePacked("0", secondStr));
+    }
+<span class="cstat-no" title="statement not covered" >    return</span>
+      string(
+        abi.encodePacked(
+          toString(year),
+          "-",
+          monthStr,
+          "-",
+          dayStr,
+          " ",
+          hourStr,
+          ":",
+          minuteStr,
+          ":",
+          secondStr
+        )
+      );
+  }
+&nbsp;
+<span class="fstat-no" title="function not covered" >  function genTokenURI(</span>
+    uint256 tokenId,
+    string memory name,
+    string memory type_value,
+    uint64 start_time,
+    uint64 end_time
+  ) public view returns (string memory) {
+<span class="cstat-no" title="statement not covered" >    string memory image = encode(</span>
+      bytes(generateImage(start_time, end_time, name))
+    );
+    name = string(abi.encodePacked(name, " #", toString(tokenId)));
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    return</span>
+      string(
+        abi.encodePacked(
+          "data:application/json;base64,",
+          encode(
+            bytes(
+              abi.encodePacked(
+                '{"name":"',
+                name,
+                '", "image": "',
+                "data:image/svg+xml;base64,",
+                image,
+                '", "attributes":[{"trait_type":"type","value":"',
+                type_value,
+                '"},{"display_type":"date","trait_type":"start_time","value":"',
+                toString(start_time),
+                configTime(end_time),
+                "}]}"
+              )
+            )
+          )
+        )
+      );
+  }
+&nbsp;
+<span class="fstat-no" title="function not covered" >  function configTime(uint64 time) internal pure returns (string memory) {</span>
+<span class="cstat-no" title="statement not covered" >    if (time == type(uint64).max) {</span>
+<span class="cstat-no" title="statement not covered" >      return</span>
+        string(
+          abi.encodePacked('"},{"trait_type":"end_time","value":"Infinity"')
+        );
+    } else {
+<span class="cstat-no" title="statement not covered" >      return</span>
+        string(
+          abi.encodePacked(
+            '"},{"display_type":"date","trait_type":"end_time","value":"',
+            toString(time),
+            '"'
+          )
+        );
+    }
+  }
+}
+&nbsp;</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Fri Nov 15 2024 18:00:01 GMT+0100 (Central European Standard Time)
+</div>
+</div>
+<script src="../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../sorter.js"></script>
+</body>
+</html>
