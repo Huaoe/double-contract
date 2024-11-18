@@ -1998,8 +1998,8 @@
       ]
     },
     "C:\\Users\\thoma\\Alyra\\double\\double-contract\\contracts\\DoNFTFactory.sol": {
-      "lastModificationDate": 1731921991539,
-      "contentHash": "c5a0327f2c2f30565841695c8414854c",
+      "lastModificationDate": 1731931503486,
+      "contentHash": "9708f6b50fb2c4a46d98be2af86f00ba",
       "sourceName": "contracts/DoNFTFactory.sol",
       "solcConfig": {
         "version": "0.8.28",
@@ -2027,16 +2027,17 @@
         }
       },
       "imports": [
+        "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol",
         "@openzeppelin/contracts/proxy/beacon/BeaconProxy.sol",
         "@openzeppelin/contracts/interfaces/IERC165.sol",
         "@openzeppelin/contracts/interfaces/IERC721.sol",
-        "./OwnableContract.sol",
         "./IComplexDoNFT.sol",
         "./dualRoles/wrap/WrapERC721DualRole.sol",
-        "./dualRoles/IERC4907.sol"
+        "./dualRoles/IERC4907.sol",
+        "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol"
       ],
       "versionPragmas": [
-        "^0.8.28"
+        "^0.8.20"
       ],
       "artifacts": [
         "DoNFTFactory"
@@ -2672,6 +2673,46 @@
       "artifacts": [
         "Strings",
         "TimeLockMultiSigWallet"
+      ]
+    },
+    "C:\\Users\\thoma\\Alyra\\double\\double-contract\\node_modules\\@openzeppelin\\contracts-upgradeable\\access\\OwnableUpgradeable.sol": {
+      "lastModificationDate": 1731675264390,
+      "contentHash": "77d30f3cd93f46b80b6f8f1ebc574ee4",
+      "sourceName": "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol",
+      "solcConfig": {
+        "version": "0.8.28",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "paris",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "storageLayout"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "../utils/ContextUpgradeable.sol",
+        "../proxy/utils/Initializable.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.20"
+      ],
+      "artifacts": [
+        "OwnableUpgradeable"
       ]
     }
   }

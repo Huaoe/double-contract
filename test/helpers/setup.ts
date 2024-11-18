@@ -15,121 +15,132 @@ export interface TestContext {
 
 export async function setupTest(): Promise<TestContext> {
   const [owner, admin, ...users] = await ethers.getSigners();
-  
-  // Deploy DoubleSVG library first
+
+  // 1. Deploy DoubleSVG library
   const DoubleSVG = await ethers.getContractFactory("DoubleSVG");
   const doubleSVG = await DoubleSVG.deploy();
   await doubleSVG.waitForDeployment();
 
-  // Deploy ComplexDoNFT as implementation
-  const Implementation = await ethers.getContractFactory("ComplexDoNFT", {
+  // 2. Deploy Market first
+  const Market = await ethers.getContractFactory("Market");
+  const market = await Market.deploy();
+  await market.waitForDeployment();
+
+  // 3. Deploy ComplexDoNFT implementation with library
+  const ComplexDoNFT = await ethers.getContractFactory("ComplexDoNFT", {
     libraries: {
       DoubleSVG: await doubleSVG.getAddress()
     }
   });
-  const beacon = await upgrades.deployBeacon(Implementation, {
-    initialOwner: owner.address,
-    unsafeAllow: ["external-library-linking"]
+  
+  // 4. Deploy and initialize beacon with ComplexDoNFT implementation
+  const beacon = await upgrades.deployBeacon(ComplexDoNFT, {
+    unsafeAllow: ["external-library-linking"],
+    initialOwner: owner.address
   });
   await beacon.waitForDeployment();
 
-  // Deploy Market
-  const Market = await ethers.getContractFactory("Market");
-  const deployedMarket = await Market.deploy();
-  await deployedMarket.waitForDeployment();
-
-  // Deploy Factory
+  // 5. Deploy Factory implementation
   const Factory = await ethers.getContractFactory("DoNFTFactory");
-  const factory = await Factory.deploy(
-    owner.address,
-    admin.address,
-    await beacon.getAddress(),
-    await deployedMarket.getAddress()
+  
+  // 6. Deploy and initialize factory proxy
+  const factory = await upgrades.deployProxy(
+    Factory,
+    [
+      owner.address,
+      admin.address,
+      await beacon.getAddress(),
+      await market.getAddress()
+    ],
+    {
+      initializer: 'initialize',
+      unsafeAllow: ["external-library-linking"]
+    }
   );
   await factory.waitForDeployment();
 
-  // Deploy MockNFT
+  // 7. Deploy MockNFT with IERC4907 support
   const MockNFT = await ethers.getContractFactory("MockNFT");
   const mockNFT = await MockNFT.deploy();
   await mockNFT.waitForDeployment();
 
-  // Make sure MockNFT supports IERC4907 interface
-  // Assuming MockNFT has a function to set this up
-  if (typeof mockNFT.setInterfaceSupport === 'function') {
+  // 8. Set interface support for MockNFT
+  if (typeof mockNFT.setInterfaceSupport === "function") {
     await mockNFT.setInterfaceSupport(true);
+    // Wait for the transaction
+    await mockNFT.waitForTransaction();
   }
 
-  // Deploy DoNFT through factory
-  const deployTx = await factory.deployDoNFT(
-    "Test DoNFT",
-    "TDNFT",
-    await mockNFT.getAddress(),
-    owner.address,
-    admin.address,
-    users[1].address,
-    "game12" 
-  );
-
-  // Wait for deployment and get proxy address
-  const receipt = await deployTx.wait();
-  
-  // Add debug logging to understand the receipt structure
-  console.log("Transaction receipt:", {
-    status: receipt.status,
-    events: receipt.events ? receipt.events.length : 'no events'
-  });
-
-  // More defensive event finding
-  let proxyAddress;
-  
-  if (receipt.events) {
-    const deployEvent = receipt.events.find(
-      (e: any) => e && e.event === "DeployDoNFT"
+  // 9. Deploy DoNFT through factory with proper error handling
+  try {
+    const deployTx = await factory.deployDoNFT(
+      "Test DoNFT",
+      "TDNFT",
+      await mockNFT.getAddress(),
+      owner.address,
+      admin.address,
+      users[1].address,
+      "game12"
     );
-    
-    if (deployEvent && deployEvent.args) {
-      proxyAddress = deployEvent.args.proxy;
-    }
-  }
 
-  // If we couldn't find the event, try looking in logs
-  if (!proxyAddress && receipt.logs) {
-    // Try to decode logs manually
-    const factory = await ethers.getContractFactory("DoNFTFactory");
-    const deployEventSignature = factory.interface.getEvent("DeployDoNFT").format();
-    
-    for (const log of receipt.logs) {
+    // Wait for deployment with more detailed receipt
+    const receipt = await deployTx.wait();
+    console.log("DoNFT deployment successful:", receipt.hash);
+
+    // Debug: Log raw receipt
+    console.log("Raw receipt:", JSON.stringify(receipt, null, 2));
+
+    // Try getting events through getLogs() if events array is undefined
+    const logs = receipt.logs || [];
+    console.log("Transaction logs:", logs);
+
+    // Parse logs manually if needed
+    const deployEvent = logs.find(log => {
       try {
         const parsedLog = factory.interface.parseLog(log);
-        if (parsedLog && parsedLog.name === "DeployDoNFT") {
-          proxyAddress = parsedLog.args.proxy;
-          break;
-        }
+        return parsedLog.name === "DeployDoNFT" || parsedLog.name === "DoNFTDeployed";
       } catch (e) {
-        // Skip logs that can't be parsed
-        continue;
+        return false;
       }
+    });
+
+    if (!deployEvent) {
+      throw new Error("Failed to get proxy address from deployment event");
     }
+
+    // Parse the event data
+    const parsedEvent = factory.interface.parseLog(deployEvent);
+    const proxyAddress = parsedEvent.args.proxy;
+    console.log("Proxy address:", proxyAddress);
+
+    // Verify proxy address before getting implementation
+    if (!ethers.isAddress(proxyAddress)) {
+      throw new Error(`Invalid proxy address: ${proxyAddress}`);
+    }
+
+    // Get implementation contract at proxy address
+    const implementation = await ethers.getContractAt(
+      "ComplexDoNFT",
+      proxyAddress
+    );
+
+    return {
+      owner,
+      admin,
+      users,
+      market,
+      factory,
+      implementation,
+      beacon,
+      mockNFT,
+    };
+  } catch (error) {
+    console.error("Deployment error details:", {
+      message: error.message,
+      data: error.data,
+      transaction: error.transaction,
+      stack: error.stack // Add stack trace for better debugging
+    });
+    throw error;
   }
-
-  if (!proxyAddress) {
-    throw new Error("Could not find proxy address in transaction events or logs");
-  }
-
-  // Get implementation contract at proxy address
-  const implementation = await ethers.getContractAt(
-    "ComplexDoNFT",
-    proxyAddress
-  );
-
-  return {
-    owner,
-    admin,
-    users,
-    market: deployedMarket,
-    factory,
-    implementation,
-    beacon,
-    mockNFT
-  };
 }

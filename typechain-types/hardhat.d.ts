@@ -14,6 +14,10 @@ import * as Contracts from ".";
 declare module "hardhat/types/runtime" {
   interface HardhatEthersHelpers extends HardhatEthersHelpersBase {
     getContractFactory(
+      name: "OwnableUpgradeable",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.OwnableUpgradeable__factory>;
+    getContractFactory(
       name: "Initializable",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.Initializable__factory>;
@@ -230,10 +234,6 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.MockERC20__factory>;
     getContractFactory(
-      name: "IERC4907",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.IERC4907__factory>;
-    getContractFactory(
       name: "MockNFT",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.MockNFT__factory>;
@@ -263,6 +263,11 @@ declare module "hardhat/types/runtime" {
     ): Promise<Contracts.WrapDoNFT__factory>;
 
     getContractAt(
+      name: "OwnableUpgradeable",
+      address: string | ethers.Addressable,
+      signer?: ethers.Signer
+    ): Promise<Contracts.OwnableUpgradeable>;
+    getContractAt(
       name: "Initializable",
       address: string | ethers.Addressable,
       signer?: ethers.Signer
@@ -532,11 +537,6 @@ declare module "hardhat/types/runtime" {
       address: string | ethers.Addressable,
       signer?: ethers.Signer
     ): Promise<Contracts.MockERC20>;
-    getContractAt(
-      name: "IERC4907",
-      address: string | ethers.Addressable,
-      signer?: ethers.Signer
-    ): Promise<Contracts.IERC4907>;
     getContractAt(
       name: "MockNFT",
       address: string | ethers.Addressable,
@@ -574,6 +574,10 @@ declare module "hardhat/types/runtime" {
     ): Promise<Contracts.WrapDoNFT>;
 
     deployContract(
+      name: "OwnableUpgradeable",
+      signerOrOptions?: ethers.Signer | DeployContractOptions
+    ): Promise<Contracts.OwnableUpgradeable>;
+    deployContract(
       name: "Initializable",
       signerOrOptions?: ethers.Signer | DeployContractOptions
     ): Promise<Contracts.Initializable>;
@@ -789,10 +793,6 @@ declare module "hardhat/types/runtime" {
       name: "MockERC20",
       signerOrOptions?: ethers.Signer | DeployContractOptions
     ): Promise<Contracts.MockERC20>;
-    deployContract(
-      name: "IERC4907",
-      signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.IERC4907>;
     deployContract(
       name: "MockNFT",
       signerOrOptions?: ethers.Signer | DeployContractOptions
@@ -823,6 +823,11 @@ declare module "hardhat/types/runtime" {
     ): Promise<Contracts.WrapDoNFT>;
 
     deployContract(
+      name: "OwnableUpgradeable",
+      args: any[],
+      signerOrOptions?: ethers.Signer | DeployContractOptions
+    ): Promise<Contracts.OwnableUpgradeable>;
+    deployContract(
       name: "Initializable",
       args: any[],
       signerOrOptions?: ethers.Signer | DeployContractOptions
@@ -1092,11 +1097,6 @@ declare module "hardhat/types/runtime" {
       args: any[],
       signerOrOptions?: ethers.Signer | DeployContractOptions
     ): Promise<Contracts.MockERC20>;
-    deployContract(
-      name: "IERC4907",
-      args: any[],
-      signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.IERC4907>;
     deployContract(
       name: "MockNFT",
       args: any[],

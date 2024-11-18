@@ -1,15 +1,17 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.28;
+pragma solidity ^0.8.20;
 
+import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "@openzeppelin/contracts/proxy/beacon/BeaconProxy.sol";
 import "@openzeppelin/contracts/interfaces/IERC165.sol";
 import "@openzeppelin/contracts/interfaces/IERC721.sol";
-import "./OwnableContract.sol";
+// import "./OwnableContract.sol";
 import "./IComplexDoNFT.sol";
 import "./dualRoles/wrap/WrapERC721DualRole.sol";
 import "./dualRoles/IERC4907.sol";
+import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 
-contract DoNFTFactory is OwnableContract {
+contract DoNFTFactory is OwnableUpgradeable {
   event DeployDoNFT(
     address proxy,
     string name,
@@ -31,14 +33,21 @@ contract DoNFTFactory is OwnableContract {
 
   address public beacon;
   address public market;
+  address public admin;
 
-  constructor(
+  modifier onlyAdmin() {
+    require(msg.sender == admin, "Caller is not the admin");
+    _;
+  }
+
+  function initialize(
     address owner_,
     address admin_,
     address beacon_,
     address market_
-  ) {
-    initOwnableContract(owner_, admin_);
+  ) public initializer {
+    _transferOwnership(owner_);
+    admin = admin_;
     beacon = beacon_;
     market = market_;
   }

@@ -3,6 +3,7 @@
 /* eslint-disable */
 import type {
   BaseContract,
+  BigNumberish,
   BytesLike,
   FunctionFragment,
   Result,
@@ -25,17 +26,15 @@ import type {
 export interface DoNFTFactoryInterface extends Interface {
   getFunction(
     nameOrSignature:
-      | "acceptOwner"
       | "admin"
       | "beacon"
       | "deployDoNFT"
       | "deployWrapNFT"
       | "getDoNFT"
+      | "initialize"
       | "market"
       | "owner"
-      | "pendingOwner"
       | "renounceOwnership"
-      | "setAdmin"
       | "setBeaconAndMarket"
       | "transferOwnership"
   ): FunctionFragment;
@@ -44,15 +43,10 @@ export interface DoNFTFactoryInterface extends Interface {
     nameOrSignatureOrTopic:
       | "DeployDoNFT"
       | "DeployWrapERC721DualRole"
-      | "NewAdmin"
-      | "NewOwner"
-      | "NewPendingOwner"
+      | "Initialized"
+      | "OwnershipTransferred"
   ): EventFragment;
 
-  encodeFunctionData(
-    functionFragment: "acceptOwner",
-    values?: undefined
-  ): string;
   encodeFunctionData(functionFragment: "admin", values?: undefined): string;
   encodeFunctionData(functionFragment: "beacon", values?: undefined): string;
   encodeFunctionData(
@@ -75,19 +69,15 @@ export interface DoNFTFactoryInterface extends Interface {
     functionFragment: "getDoNFT",
     values: [AddressLike, string]
   ): string;
+  encodeFunctionData(
+    functionFragment: "initialize",
+    values: [AddressLike, AddressLike, AddressLike, AddressLike]
+  ): string;
   encodeFunctionData(functionFragment: "market", values?: undefined): string;
   encodeFunctionData(functionFragment: "owner", values?: undefined): string;
   encodeFunctionData(
-    functionFragment: "pendingOwner",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
     functionFragment: "renounceOwnership",
     values?: undefined
-  ): string;
-  encodeFunctionData(
-    functionFragment: "setAdmin",
-    values: [AddressLike]
   ): string;
   encodeFunctionData(
     functionFragment: "setBeaconAndMarket",
@@ -98,10 +88,6 @@ export interface DoNFTFactoryInterface extends Interface {
     values: [AddressLike]
   ): string;
 
-  decodeFunctionResult(
-    functionFragment: "acceptOwner",
-    data: BytesLike
-  ): Result;
   decodeFunctionResult(functionFragment: "admin", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "beacon", data: BytesLike): Result;
   decodeFunctionResult(
@@ -113,17 +99,13 @@ export interface DoNFTFactoryInterface extends Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "getDoNFT", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "initialize", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "market", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "pendingOwner",
-    data: BytesLike
-  ): Result;
   decodeFunctionResult(
     functionFragment: "renounceOwnership",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: "setAdmin", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "setBeaconAndMarket",
     data: BytesLike
@@ -193,12 +175,11 @@ export namespace DeployWrapERC721DualRoleEvent {
   export type LogDescription = TypedLogDescription<Event>;
 }
 
-export namespace NewAdminEvent {
-  export type InputTuple = [oldAdmin: AddressLike, newAdmin: AddressLike];
-  export type OutputTuple = [oldAdmin: string, newAdmin: string];
+export namespace InitializedEvent {
+  export type InputTuple = [version: BigNumberish];
+  export type OutputTuple = [version: bigint];
   export interface OutputObject {
-    oldAdmin: string;
-    newAdmin: string;
+    version: bigint;
   }
   export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
   export type Filter = TypedDeferredTopicFilter<Event>;
@@ -206,28 +187,12 @@ export namespace NewAdminEvent {
   export type LogDescription = TypedLogDescription<Event>;
 }
 
-export namespace NewOwnerEvent {
-  export type InputTuple = [oldOwner: AddressLike, newOwner: AddressLike];
-  export type OutputTuple = [oldOwner: string, newOwner: string];
+export namespace OwnershipTransferredEvent {
+  export type InputTuple = [previousOwner: AddressLike, newOwner: AddressLike];
+  export type OutputTuple = [previousOwner: string, newOwner: string];
   export interface OutputObject {
-    oldOwner: string;
+    previousOwner: string;
     newOwner: string;
-  }
-  export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
-  export type Filter = TypedDeferredTopicFilter<Event>;
-  export type Log = TypedEventLog<Event>;
-  export type LogDescription = TypedLogDescription<Event>;
-}
-
-export namespace NewPendingOwnerEvent {
-  export type InputTuple = [
-    oldPendingOwner: AddressLike,
-    newPendingOwner: AddressLike
-  ];
-  export type OutputTuple = [oldPendingOwner: string, newPendingOwner: string];
-  export interface OutputObject {
-    oldPendingOwner: string;
-    newPendingOwner: string;
   }
   export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
   export type Filter = TypedDeferredTopicFilter<Event>;
@@ -278,8 +243,6 @@ export interface DoNFTFactory extends BaseContract {
     event?: TCEvent
   ): Promise<this>;
 
-  acceptOwner: TypedContractMethod<[], [void], "nonpayable">;
-
   admin: TypedContractMethod<[], [string], "view">;
 
   beacon: TypedContractMethod<[], [string], "view">;
@@ -310,15 +273,22 @@ export interface DoNFTFactory extends BaseContract {
     "view"
   >;
 
+  initialize: TypedContractMethod<
+    [
+      owner_: AddressLike,
+      admin_: AddressLike,
+      beacon_: AddressLike,
+      market_: AddressLike
+    ],
+    [void],
+    "nonpayable"
+  >;
+
   market: TypedContractMethod<[], [string], "view">;
 
   owner: TypedContractMethod<[], [string], "view">;
 
-  pendingOwner: TypedContractMethod<[], [string], "view">;
-
   renounceOwnership: TypedContractMethod<[], [void], "nonpayable">;
-
-  setAdmin: TypedContractMethod<[newAdmin: AddressLike], [void], "nonpayable">;
 
   setBeaconAndMarket: TypedContractMethod<
     [beacon_: AddressLike, market_: AddressLike],
@@ -327,7 +297,7 @@ export interface DoNFTFactory extends BaseContract {
   >;
 
   transferOwnership: TypedContractMethod<
-    [_pendingOwner: AddressLike],
+    [newOwner: AddressLike],
     [void],
     "nonpayable"
   >;
@@ -336,9 +306,6 @@ export interface DoNFTFactory extends BaseContract {
     key: string | FunctionFragment
   ): T;
 
-  getFunction(
-    nameOrSignature: "acceptOwner"
-  ): TypedContractMethod<[], [void], "nonpayable">;
   getFunction(
     nameOrSignature: "admin"
   ): TypedContractMethod<[], [string], "view">;
@@ -375,20 +342,26 @@ export interface DoNFTFactory extends BaseContract {
     "view"
   >;
   getFunction(
+    nameOrSignature: "initialize"
+  ): TypedContractMethod<
+    [
+      owner_: AddressLike,
+      admin_: AddressLike,
+      beacon_: AddressLike,
+      market_: AddressLike
+    ],
+    [void],
+    "nonpayable"
+  >;
+  getFunction(
     nameOrSignature: "market"
   ): TypedContractMethod<[], [string], "view">;
   getFunction(
     nameOrSignature: "owner"
   ): TypedContractMethod<[], [string], "view">;
   getFunction(
-    nameOrSignature: "pendingOwner"
-  ): TypedContractMethod<[], [string], "view">;
-  getFunction(
     nameOrSignature: "renounceOwnership"
   ): TypedContractMethod<[], [void], "nonpayable">;
-  getFunction(
-    nameOrSignature: "setAdmin"
-  ): TypedContractMethod<[newAdmin: AddressLike], [void], "nonpayable">;
   getFunction(
     nameOrSignature: "setBeaconAndMarket"
   ): TypedContractMethod<
@@ -398,7 +371,7 @@ export interface DoNFTFactory extends BaseContract {
   >;
   getFunction(
     nameOrSignature: "transferOwnership"
-  ): TypedContractMethod<[_pendingOwner: AddressLike], [void], "nonpayable">;
+  ): TypedContractMethod<[newOwner: AddressLike], [void], "nonpayable">;
 
   getEvent(
     key: "DeployDoNFT"
@@ -415,25 +388,18 @@ export interface DoNFTFactory extends BaseContract {
     DeployWrapERC721DualRoleEvent.OutputObject
   >;
   getEvent(
-    key: "NewAdmin"
+    key: "Initialized"
   ): TypedContractEvent<
-    NewAdminEvent.InputTuple,
-    NewAdminEvent.OutputTuple,
-    NewAdminEvent.OutputObject
+    InitializedEvent.InputTuple,
+    InitializedEvent.OutputTuple,
+    InitializedEvent.OutputObject
   >;
   getEvent(
-    key: "NewOwner"
+    key: "OwnershipTransferred"
   ): TypedContractEvent<
-    NewOwnerEvent.InputTuple,
-    NewOwnerEvent.OutputTuple,
-    NewOwnerEvent.OutputObject
-  >;
-  getEvent(
-    key: "NewPendingOwner"
-  ): TypedContractEvent<
-    NewPendingOwnerEvent.InputTuple,
-    NewPendingOwnerEvent.OutputTuple,
-    NewPendingOwnerEvent.OutputObject
+    OwnershipTransferredEvent.InputTuple,
+    OwnershipTransferredEvent.OutputTuple,
+    OwnershipTransferredEvent.OutputObject
   >;
 
   filters: {
@@ -459,37 +425,26 @@ export interface DoNFTFactory extends BaseContract {
       DeployWrapERC721DualRoleEvent.OutputObject
     >;
 
-    "NewAdmin(address,address)": TypedContractEvent<
-      NewAdminEvent.InputTuple,
-      NewAdminEvent.OutputTuple,
-      NewAdminEvent.OutputObject
+    "Initialized(uint64)": TypedContractEvent<
+      InitializedEvent.InputTuple,
+      InitializedEvent.OutputTuple,
+      InitializedEvent.OutputObject
     >;
-    NewAdmin: TypedContractEvent<
-      NewAdminEvent.InputTuple,
-      NewAdminEvent.OutputTuple,
-      NewAdminEvent.OutputObject
-    >;
-
-    "NewOwner(address,address)": TypedContractEvent<
-      NewOwnerEvent.InputTuple,
-      NewOwnerEvent.OutputTuple,
-      NewOwnerEvent.OutputObject
-    >;
-    NewOwner: TypedContractEvent<
-      NewOwnerEvent.InputTuple,
-      NewOwnerEvent.OutputTuple,
-      NewOwnerEvent.OutputObject
+    Initialized: TypedContractEvent<
+      InitializedEvent.InputTuple,
+      InitializedEvent.OutputTuple,
+      InitializedEvent.OutputObject
     >;
 
-    "NewPendingOwner(address,address)": TypedContractEvent<
-      NewPendingOwnerEvent.InputTuple,
-      NewPendingOwnerEvent.OutputTuple,
-      NewPendingOwnerEvent.OutputObject
+    "OwnershipTransferred(address,address)": TypedContractEvent<
+      OwnershipTransferredEvent.InputTuple,
+      OwnershipTransferredEvent.OutputTuple,
+      OwnershipTransferredEvent.OutputObject
     >;
-    NewPendingOwner: TypedContractEvent<
-      NewPendingOwnerEvent.InputTuple,
-      NewPendingOwnerEvent.OutputTuple,
-      NewPendingOwnerEvent.OutputObject
+    OwnershipTransferred: TypedContractEvent<
+      OwnershipTransferredEvent.InputTuple,
+      OwnershipTransferredEvent.OutputTuple,
+      OwnershipTransferredEvent.OutputObject
     >;
   };
 }
